@@ -1,0 +1,4 @@
+enum UserRole {
+  homeowner,
+  professional,
+}
