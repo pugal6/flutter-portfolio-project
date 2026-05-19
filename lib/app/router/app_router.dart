@@ -12,6 +12,7 @@ import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/homeowner/dashboard/presentation/screens/homeowner_dashboard_screen.dart';
 
 import '../../features/professional/dashboard/presentation/screens/professional_dashboard_screen.dart';
+import '../../features/homeowner/request_creation/presentation/screens/request_creation_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -114,5 +115,12 @@ final GoRouter appRouter = GoRouter(
         return const ProfessionalDashboardScreen();
       },
     ),
+
+    GoRoute(
+  path: '/create-request',
+  builder: (context, state) {
+    return const RequestCreationScreen();
+  },
+),
   ],
 );

@@ -1,12 +1,12 @@
-// homeowner_dashboard_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio_project/features/auth/data/repository/auth_repository.dart';
 
-
-class HomeownerDashboardScreen extends StatelessWidget {
-  const HomeownerDashboardScreen({super.key});
+class HomeownerDashboardScreen
+    extends StatelessWidget {
+  const HomeownerDashboardScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,9 @@ class HomeownerDashboardScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Homeowner Dashboard'),
+        title: const Text(
+          'Homeowner Dashboard',
+        ),
 
         actions: [
           IconButton(
@@ -31,8 +33,15 @@ class HomeownerDashboardScreen extends StatelessWidget {
         ],
       ),
 
-      body: const Center(
-        child: Text('Homeowner Dashboard'),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            context.go('/create-request');
+          },
+          child: const Text(
+            'Create Service Request',
+          ),
+        ),
       ),
     );
   }
