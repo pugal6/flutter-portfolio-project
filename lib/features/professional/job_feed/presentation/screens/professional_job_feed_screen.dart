@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio_project/shared/job_details/presentation/screens/job_details_screen.dart';
 
 import '../../../../../shared/models/job_model.dart';
 import '../../../../../shared/repositories/job_repository.dart';
@@ -58,64 +59,72 @@ class ProfessionalJobFeedScreen
             itemBuilder: (context, index) {
               final job = jobs[index];
 
-              return Card(
-                margin:
-                    const EdgeInsets.all(12),
+             return GestureDetector(
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            JobDetailsScreen(
+          jobId: job.id,
+        ),
+      ),
+    );
+  },
 
-                child: Padding(
-                  padding:
-                      const EdgeInsets.all(16),
+  child: Card(
+    margin: const EdgeInsets.all(12),
 
-                  child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
+    child: Padding(
+      padding: const EdgeInsets.all(16),
 
-                    children: [
-                      Text(
-                        job.category,
-                        style:
-                            const TextStyle(
-                          fontSize: 18,
-                          fontWeight:
-                              FontWeight.bold,
-                        ),
-                      ),
+      child: Column(
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
 
-                      const SizedBox(
-                        height: 10,
-                      ),
+        children: [
+          Text(
+            job.category,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight:
+                  FontWeight.bold,
+            ),
+          ),
 
-                      Text(
-                        job.description,
-                      ),
+          const SizedBox(height: 10),
 
-                      const SizedBox(
-                        height: 10,
-                      ),
+          Text(
+            job.description,
+          ),
 
-                      Text(
-                        'Status: ${job.status.name}',
-                      ),
+          const SizedBox(height: 10),
 
-                      const SizedBox(height: 16),
+          Text(
+            'Status: ${job.status.name}',
+          ),
 
-SizedBox(
-  width: double.infinity,
-  child: ElevatedButton(
-    onPressed: () async {
-      await jobRepository.acceptJob(
-        jobId: job.id,
-      );
-    },
-    child: const Text(
-      'Accept Job',
+          const SizedBox(height: 16),
+
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () async {
+                await jobRepository
+                    .acceptJob(
+                  jobId: job.id,
+                );
+              },
+              child: const Text(
+                'Accept Job',
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
   ),
-),
-                    ],
-                  ),
-                ),
-              );
+);
             },
           );
         },

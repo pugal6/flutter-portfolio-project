@@ -109,4 +109,65 @@ Future<void> acceptJob({
     'professionalId': user.uid,
   });
 }
+
+Future<void> updateJobStatus({
+  required String jobId,
+  required JobStatus status,
+}) async {
+  await _firestore
+      .collection('jobs')
+      .doc(jobId)
+      .update({
+    'status': status.name,
+  });
+}
+
+Stream<List<JobModel>> getProfessionalActiveJobs() {
+  final user = _firebaseAuth.currentUser;
+
+  if (user == null) {
+    throw Exception('User not logged in');
+  }
+
+  return _firestore
+      .collection('jobs')
+      .where(
+        'professionalId',
+        isEqualTo: user.uid,
+      )
+      .where(
+        'status',
+        whereIn: [
+          JobStatus.accepted.name,
+          JobStatus.inProgress.name,
+        ],
+      )
+      .snapshots()
+      .map(
+    (snapshot) {
+      return snapshot.docs.map((doc) {
+        return JobModel.fromMap(
+          doc.data(),
+        );
+      }).toList();
+    },
+  );
+}
+
+
+Stream<JobModel> getJobById(
+  String jobId,
+) {
+  return _firestore
+      .collection('jobs')
+      .doc(jobId)
+      .snapshots()
+      .map(
+    (doc) {
+      return JobModel.fromMap(
+        doc.data()!,
+      );
+    },
+  );
+}
 }

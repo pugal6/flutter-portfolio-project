@@ -35,15 +35,35 @@ class ProfessionalDashboardScreen
         ],
       ),
 
-      body: Center(
-  child: ElevatedButton(
-    onPressed: () {
-      context.go('/open-jobs');
-    },
-    child: const Text(
-      'View Open Jobs',
+     body: Column(
+  mainAxisAlignment:
+      MainAxisAlignment.center,
+
+  children: [
+    Center(
+      child: ElevatedButton(
+        onPressed: () {
+          context.go('/open-jobs');
+        },
+        child: const Text(
+          'View Open Jobs',
+        ),
+      ),
     ),
-  ),
+
+    const SizedBox(height: 20),
+
+    Center(
+      child: ElevatedButton(
+        onPressed: () {
+          context.go('/active-jobs');
+        },
+        child: const Text(
+          'View Active Jobs',
+        ),
+      ),
+    ),
+  ],
 ),
     );
   }
