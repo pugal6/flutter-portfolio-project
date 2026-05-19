@@ -65,9 +65,10 @@ class ProfessionalJobFeedScreen
       context,
       MaterialPageRoute(
         builder: (_) =>
-            JobDetailsScreen(
-          jobId: job.id,
-        ),
+           JobDetailsScreen(
+  jobId: job.id,
+  isProfessional: true,
+),
       ),
     );
   },

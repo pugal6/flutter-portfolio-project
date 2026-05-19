@@ -33,6 +33,7 @@ class JobRepository {
       status: JobStatus.pending,
       createdAt: DateTime.now(),
       professionalId: null,
+      cancelledBy: null,
     );
 
     await docRef.set(
@@ -113,12 +114,14 @@ Future<void> acceptJob({
 Future<void> updateJobStatus({
   required String jobId,
   required JobStatus status,
+  String? cancelledBy,
 }) async {
   await _firestore
       .collection('jobs')
       .doc(jobId)
       .update({
     'status': status.name,
+    'cancelledBy': cancelledBy,
   });
 }
 

@@ -7,10 +7,14 @@ import '../../../../../shared/repositories/job_repository.dart';
 class JobDetailsScreen extends StatelessWidget {
   final String jobId;
 
-  const JobDetailsScreen({
-    super.key,
-    required this.jobId,
-  });
+
+final bool isProfessional;
+
+const JobDetailsScreen({
+  super.key,
+  required this.jobId,
+  required this.isProfessional,
+});
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +101,10 @@ class JobDetailsScreen extends StatelessWidget {
                   height: 30,
                 ),
 
-                if (job.status ==
-                    JobStatus.accepted)
+               if (
+    isProfessional &&
+    job.status ==
+        JobStatus.accepted)
                   Column(
                     children: [
                       SizedBox(
@@ -136,13 +142,11 @@ class JobDetailsScreen extends StatelessWidget {
                           onPressed:
                               () async {
                             await jobRepository
-                                .updateJobStatus(
-                              jobId:
-                                  job.id,
-                              status:
-                                  JobStatus
-                                      .cancelled,
-                            );
+    .updateJobStatus(
+  jobId: job.id,
+  status: JobStatus.cancelled,
+  cancelledBy: 'professional',
+);
                           },
                           child:
                               const Text(
@@ -153,8 +157,10 @@ class JobDetailsScreen extends StatelessWidget {
                     ],
                   ),
 
-                if (job.status ==
-                    JobStatus.inProgress)
+                if (
+    isProfessional &&
+    job.status ==
+        JobStatus.inProgress)
                   SizedBox(
                     width:
                         double.infinity,
@@ -176,15 +182,38 @@ class JobDetailsScreen extends StatelessWidget {
                     ),
                   ),
 
+                  if (
+    !isProfessional &&
+    job.status ==
+        JobStatus.pending)
+  SizedBox(
+    width: double.infinity,
+    child: ElevatedButton(
+      onPressed: () async {
+        await jobRepository
+    .updateJobStatus(
+  jobId: job.id,
+  status: JobStatus.cancelled,
+  cancelledBy: 'homeowner',
+);
+      },
+      child: const Text(
+        'Cancel Request',
+      ),
+    ),
+  ),
+
                 if (job.status ==
                         JobStatus
                             .completed ||
                     job.status ==
                         JobStatus
                             .cancelled)
-                  const Text(
-                    'This job is closed',
-                  ),
+                 Text(
+  job.cancelledBy != null
+      ? 'Cancelled by ${job.cancelledBy}'
+      : 'This job is completed',
+),
               ],
             ),
           );

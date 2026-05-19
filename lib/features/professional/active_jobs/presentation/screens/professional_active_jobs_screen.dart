@@ -66,8 +66,9 @@ class ProfessionalActiveJobsScreen
                     MaterialPageRoute(
                       builder: (_) =>
                          JobDetailsScreen(
-                            jobId: job.id,
-                          ),
+  jobId: job.id,
+  isProfessional: true,
+),
                     ),
                   );
                 },

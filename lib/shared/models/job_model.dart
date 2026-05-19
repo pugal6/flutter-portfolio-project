@@ -14,6 +14,9 @@ class JobModel {
   final DateTime createdAt;
 
   final String? professionalId;
+
+  final String? cancelledBy;
+
   JobModel({
     required this.id,
     required this.homeownerId,
@@ -22,6 +25,7 @@ class JobModel {
     required this.status,
     required this.createdAt,
     this.professionalId,
+    this.cancelledBy,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,6 +37,7 @@ class JobModel {
       'status': status.name,
       'createdAt': createdAt.toIso8601String(),
       'professionalId': professionalId,
+      'cancelledBy': cancelledBy,
     };
   }
 
@@ -58,6 +63,8 @@ class JobModel {
       ),
 
       professionalId: map['professionalId'],
+
+      cancelledBy: map['cancelledBy'],
     );
   }
 }

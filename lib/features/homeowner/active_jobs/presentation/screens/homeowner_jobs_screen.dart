@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio_project/shared/job_details/presentation/screens/job_details_screen.dart';
 
 import '../../../../../shared/models/job_model.dart';
 import '../../../../../shared/repositories/job_repository.dart';
@@ -55,7 +56,21 @@ class HomeownerJobsScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final job = jobs[index];
 
-              return Card(
+              return GestureDetector(
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            JobDetailsScreen(
+          jobId: job.id,
+          isProfessional: false,
+        ),
+      ),
+    );
+  },
+
+  child:  Card(
                 margin:
                     const EdgeInsets.all(12),
 
@@ -96,6 +111,7 @@ class HomeownerJobsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+              )
               );
             },
           );
