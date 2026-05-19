@@ -35,9 +35,16 @@ class ProfessionalDashboardScreen
         ],
       ),
 
-      body: const Center(
-        child: Text('Professional Dashboard'),
-      ),
+      body: Center(
+  child: ElevatedButton(
+    onPressed: () {
+      context.go('/open-jobs');
+    },
+    child: const Text(
+      'View Open Jobs',
+    ),
+  ),
+),
     );
   }
 }

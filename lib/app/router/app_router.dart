@@ -14,6 +14,7 @@ import '../../features/homeowner/dashboard/presentation/screens/homeowner_dashbo
 
 import '../../features/professional/dashboard/presentation/screens/professional_dashboard_screen.dart';
 import '../../features/homeowner/request_creation/presentation/screens/request_creation_screen.dart';
+import '../../features/professional/job_feed/presentation/screens/professional_job_feed_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -128,6 +129,13 @@ GoRoute(
   path: '/my-requests',
   builder: (context, state) {
     return const HomeownerJobsScreen();
+  },
+),
+
+GoRoute(
+  path: '/open-jobs',
+  builder: (context, state) {
+    return const ProfessionalJobFeedScreen();
   },
 ),
   ],

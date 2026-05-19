@@ -32,6 +32,7 @@ class JobRepository {
       description: description,
       status: JobStatus.pending,
       createdAt: DateTime.now(),
+      professionalId: null,
     );
 
     await docRef.set(
@@ -67,4 +68,45 @@ class JobRepository {
       },
     );
   }
+
+  Stream<List<JobModel>> getOpenJobs() {
+  return _firestore
+      .collection('jobs')
+      .where(
+        'status',
+        isEqualTo: JobStatus.pending.name,
+      )
+      .orderBy(
+        'createdAt',
+        descending: true,
+      )
+      .snapshots()
+      .map(
+    (snapshot) {
+      return snapshot.docs.map((doc) {
+        return JobModel.fromMap(
+          doc.data(),
+        );
+      }).toList();
+    },
+  );
+}
+
+Future<void> acceptJob({
+  required String jobId,
+}) async {
+  final user = _firebaseAuth.currentUser;
+
+  if (user == null) {
+    throw Exception('User not logged in');
+  }
+
+  await _firestore
+      .collection('jobs')
+      .doc(jobId)
+      .update({
+    'status': JobStatus.accepted.name,
+    'professionalId': user.uid,
+  });
+}
 }

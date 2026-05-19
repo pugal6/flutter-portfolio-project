@@ -13,6 +13,7 @@ class JobModel {
 
   final DateTime createdAt;
 
+  final String? professionalId;
   JobModel({
     required this.id,
     required this.homeownerId,
@@ -20,6 +21,7 @@ class JobModel {
     required this.description,
     required this.status,
     required this.createdAt,
+    this.professionalId,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,6 +32,7 @@ class JobModel {
       'description': description,
       'status': status.name,
       'createdAt': createdAt.toIso8601String(),
+      'professionalId': professionalId,
     };
   }
 
@@ -53,6 +56,8 @@ class JobModel {
       createdAt: DateTime.parse(
         map['createdAt'],
       ),
+
+      professionalId: map['professionalId'],
     );
   }
 }
