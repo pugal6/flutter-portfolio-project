@@ -33,16 +33,34 @@ class HomeownerDashboardScreen
         ],
       ),
 
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            context.go('/create-request');
-          },
-          child: const Text(
-            'Create Service Request',
-          ),
+     body: Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    Center(
+      child: ElevatedButton(
+        onPressed: () {
+          context.go('/create-request');
+        },
+        child: const Text(
+          'Create Service Request',
         ),
       ),
+    ),
+
+    const SizedBox(height: 20),
+
+    Center(
+      child: ElevatedButton(
+        onPressed: () {
+          context.go('/my-requests');
+        },
+        child: const Text(
+          'View My Requests',
+        ),
+      ),
+    ),
+  ],
+),
     );
   }
 }

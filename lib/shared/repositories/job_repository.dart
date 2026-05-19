@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -26,20 +27,44 @@ class JobRepository {
 
     final job = JobModel(
       id: docRef.id,
-
       homeownerId: user.uid,
-
       category: category,
-
       description: description,
-
       status: JobStatus.pending,
-
       createdAt: DateTime.now(),
     );
 
     await docRef.set(
       job.toMap(),
+    );
+  }
+
+  Stream<List<JobModel>> getHomeownerJobs() {
+    final user = _firebaseAuth.currentUser;
+
+    if (user == null) {
+      throw Exception('User not logged in');
+    }
+
+    return _firestore
+        .collection('jobs')
+        .where(
+          'homeownerId',
+          isEqualTo: user.uid,
+        )
+        .orderBy(
+          'createdAt',
+          descending: true,
+        )
+        .snapshots()
+        .map(
+      (snapshot) {
+        return snapshot.docs.map((doc) {
+          return JobModel.fromMap(
+            doc.data(),
+          );
+        }).toList();
+      },
     );
   }
 }

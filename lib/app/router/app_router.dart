@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portfolio_project/features/homeowner/active_jobs/presentation/screens/homeowner_jobs_screen.dart';
 
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/role_selection_screen.dart';
@@ -120,6 +121,13 @@ final GoRouter appRouter = GoRouter(
   path: '/create-request',
   builder: (context, state) {
     return const RequestCreationScreen();
+  },
+),
+
+GoRoute(
+  path: '/my-requests',
+  builder: (context, state) {
+    return const HomeownerJobsScreen();
   },
 ),
   ],
