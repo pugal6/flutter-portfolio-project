@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../shared/enums/job_status.dart';
 import '../../../../../shared/models/job_model.dart';
@@ -26,6 +27,15 @@ const JobDetailsScreen({
         title: const Text(
           'Job Details',
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.push(
+            '/chat/$jobId',
+            extra: {'role': isProfessional ? 'professional' : 'homeowner'},
+          );
+        },
+        child: const Icon(Icons.chat),
       ),
 
       body: StreamBuilder<JobModel>(
