@@ -43,7 +43,7 @@ class ProfessionalDashboardScreen
     Center(
       child: ElevatedButton(
         onPressed: () {
-          context.go('/open-jobs');
+          context.push('/open-jobs');
         },
         child: const Text(
           'View Open Jobs',
@@ -56,7 +56,7 @@ class ProfessionalDashboardScreen
     Center(
       child: ElevatedButton(
         onPressed: () {
-          context.go('/active-jobs');
+          context.push('/active-jobs');
         },
         child: const Text(
           'View Active Jobs',

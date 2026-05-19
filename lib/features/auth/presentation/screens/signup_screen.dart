@@ -79,6 +79,15 @@ class SignupScreen extends StatelessWidget {
     child: const Text('Continue'),
   ),
 ),
+
+            const SizedBox(height: 16),
+
+            TextButton(
+              onPressed: () {
+                context.go('/login');
+              },
+              child: const Text('Already have an account? Log In'),
+            ),
           ],
         ),
       ),

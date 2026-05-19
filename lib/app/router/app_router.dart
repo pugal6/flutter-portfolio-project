@@ -17,6 +17,7 @@ import '../../features/professional/dashboard/presentation/screens/professional_
 import '../../features/homeowner/request_creation/presentation/screens/request_creation_screen.dart';
 import '../../features/professional/job_feed/presentation/screens/professional_job_feed_screen.dart';
 import '../../features/messaging/presentation/screens/chat_screen.dart';
+import '../../shared/job_details/presentation/screens/job_details_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -147,6 +148,20 @@ GoRoute(
     return const ProfessionalActiveJobsScreen();
   },
 ),
+    GoRoute(
+      path: '/job-details/:jobId',
+      builder: (context, state) {
+        final jobId = state.pathParameters['jobId']!;
+        final extra = state.extra as Map<String, dynamic>? ?? {};
+        final isProfessional = extra['isProfessional'] as bool? ?? false;
+        
+        return JobDetailsScreen(
+          jobId: jobId,
+          isProfessional: isProfessional,
+        );
+      },
+    ),
+
     GoRoute(
       path: '/chat/:jobId',
       builder: (context, state) {

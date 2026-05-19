@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio_project/shared/job_details/presentation/screens/job_details_screen.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../shared/models/job_model.dart';
 import '../../../../../shared/repositories/job_repository.dart';
@@ -58,15 +58,9 @@ class HomeownerJobsScreen extends StatelessWidget {
 
               return GestureDetector(
   onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) =>
-            JobDetailsScreen(
-          jobId: job.id,
-          isProfessional: false,
-        ),
-      ),
+    context.push(
+      '/job-details/${job.id}',
+      extra: {'isProfessional': false},
     );
   },
 

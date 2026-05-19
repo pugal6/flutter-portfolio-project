@@ -39,7 +39,7 @@ class HomeownerDashboardScreen
     Center(
       child: ElevatedButton(
         onPressed: () {
-          context.go('/create-request');
+          context.push('/create-request');
         },
         child: const Text(
           'Create Service Request',
@@ -52,7 +52,7 @@ class HomeownerDashboardScreen
     Center(
       child: ElevatedButton(
         onPressed: () {
-          context.go('/my-requests');
+          context.push('/my-requests');
         },
         child: const Text(
           'View My Requests',
