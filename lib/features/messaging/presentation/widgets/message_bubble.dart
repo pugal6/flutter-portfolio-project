@@ -1,9 +1,12 @@
+// message_bubble.dart
+
 import 'package:flutter/material.dart';
 
 import '../../data/models/message_model.dart';
 
 class MessageBubble extends StatelessWidget {
   final MessageModel message;
+
   final bool isCurrentUser;
 
   const MessageBubble({
@@ -14,36 +17,124 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: isCurrentUser
-          ? Alignment.centerRight
-          : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 4,
-        ),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isCurrentUser
-              ? Colors.blue.shade100
-              : Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
-          children: [
-            Text(
-              message.senderRole,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding:
+          const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 6,
+      ),
+      child: Align(
+        alignment: isCurrentUser
+            ? Alignment.centerRight
+            : Alignment.centerLeft,
+        child: ConstrainedBox(
+          constraints:
+              const BoxConstraints(
+            maxWidth: 320,
+          ),
+          child: Container(
+            padding:
+                const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: isCurrentUser
+                  ? theme
+                      .colorScheme.primary
+                  : Colors.white,
+              borderRadius:
+                  BorderRadius.only(
+                topLeft:
+                    const Radius.circular(
+                  22,
+                ),
+                topRight:
+                    const Radius.circular(
+                  22,
+                ),
+                bottomLeft:
+                    Radius.circular(
+                  isCurrentUser
+                      ? 22
+                      : 6,
+                ),
+                bottomRight:
+                    Radius.circular(
+                  isCurrentUser
+                      ? 6
+                      : 22,
+                ),
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black
+                      .withOpacity(0.04),
+                  blurRadius: 18,
+                  offset:
+                      const Offset(0, 6),
+                ),
+              ],
             ),
-            const SizedBox(height: 4),
-            Text(message.message),
-          ],
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment
+                      .start,
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration:
+                      BoxDecoration(
+                    color: isCurrentUser
+                        ? Colors.white
+                            .withOpacity(
+                            0.15,
+                          )
+                        : theme
+                            .colorScheme
+                            .primary
+                            .withOpacity(
+                            0.1,
+                          ),
+                    borderRadius:
+                        BorderRadius.circular(
+                      30,
+                    ),
+                  ),
+                  child: Text(
+                    message.senderRole
+                        .toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight:
+                          FontWeight.w700,
+                      color: isCurrentUser
+                          ? Colors.white
+                          : theme
+                              .colorScheme
+                              .primary,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                Text(
+                  message.message,
+                  style: TextStyle(
+                    color: isCurrentUser
+                        ? Colors.white
+                        : Colors.black87,
+                    height: 1.5,
+                    fontSize: 15,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

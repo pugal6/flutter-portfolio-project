@@ -22,17 +22,25 @@ class JobRepository {
       throw Exception('User not logged in');
     }
 
+    final userDoc = await _firestore.collection('users').doc(user.uid).get();
+    String name = userDoc.data()?['name'] ?? '';
+    if (name.trim().isEmpty) {
+      name = 'Homeowner';
+    }
+
     final docRef =
         _firestore.collection('jobs').doc();
 
     final job = JobModel(
       id: docRef.id,
       homeownerId: user.uid,
+      homeownerName: name,
       category: category,
       description: description,
       status: JobStatus.pending,
       createdAt: DateTime.now(),
       professionalId: null,
+      professionalName: null,
       cancelledBy: null,
     );
 
@@ -102,13 +110,20 @@ Future<void> acceptJob({
     throw Exception('User not logged in');
   }
 
+  final userDoc = await _firestore.collection('users').doc(user.uid).get();
+  String name = userDoc.data()?['name'] ?? '';
+  if (name.trim().isEmpty) {
+    name = 'Professional';
+  }
+
   await _firestore
-      .collection('jobs')
-      .doc(jobId)
-      .update({
-    'status': JobStatus.accepted.name,
-    'professionalId': user.uid,
-  });
+    .collection('jobs')
+    .doc(jobId)
+    .update({
+  'status': JobStatus.accepted.name,
+  'professionalId': user.uid,
+  'professionalName': name,
+});
 }
 
 Future<void> updateJobStatus({
@@ -125,37 +140,31 @@ Future<void> updateJobStatus({
   });
 }
 
-Stream<List<JobModel>> getProfessionalActiveJobs() {
-  final user = _firebaseAuth.currentUser;
+  Stream<List<JobModel>> getProfessionalActiveJobs() {
+    final user = _firebaseAuth.currentUser;
 
-  if (user == null) {
-    throw Exception('User not logged in');
+    if (user == null) {
+      throw Exception('User not logged in');
+    }
+
+    return _firestore
+        .collection('jobs')
+        .where(
+          'professionalId',
+          isEqualTo: user.uid,
+        )
+        .snapshots()
+        .map(
+      (snapshot) {
+        return snapshot.docs
+            .map((doc) => JobModel.fromMap(doc.data()))
+            .where((job) =>
+                job.status == JobStatus.accepted ||
+                job.status == JobStatus.inProgress)
+            .toList();
+      },
+    );
   }
-
-  return _firestore
-      .collection('jobs')
-      .where(
-        'professionalId',
-        isEqualTo: user.uid,
-      )
-      .where(
-        'status',
-        whereIn: [
-          JobStatus.accepted.name,
-          JobStatus.inProgress.name,
-        ],
-      )
-      .snapshots()
-      .map(
-    (snapshot) {
-      return snapshot.docs.map((doc) {
-        return JobModel.fromMap(
-          doc.data(),
-        );
-      }).toList();
-    },
-  );
-}
 
 
 Stream<JobModel> getJobById(

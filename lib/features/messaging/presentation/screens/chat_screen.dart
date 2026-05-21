@@ -1,3 +1,5 @@
+// chat_screen.dart
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ import '../widgets/message_input.dart';
 
 class ChatScreen extends StatefulWidget {
   final String jobId;
+
   final String currentUserRole;
 
   const ChatScreen({
@@ -39,7 +42,8 @@ class _ChatScreenState
 
     _chatBloc = ChatBloc(
       repository: ChatRepository(
-        firestore: FirebaseFirestore.instance,
+        firestore:
+            FirebaseFirestore.instance,
       ),
     );
 
@@ -49,17 +53,22 @@ class _ChatScreenState
   }
 
   void _sendMessage() {
-    if (_messageController.text.trim().isEmpty) {
+    if (_messageController.text
+        .trim()
+        .isEmpty) {
       return;
     }
 
     _chatBloc.add(
       SendMessage(
         jobId: widget.jobId,
-        senderId:
-            FirebaseAuth.instance.currentUser!.uid,
-        senderRole: widget.currentUserRole,
-        message: _messageController.text.trim(),
+        senderId: FirebaseAuth
+            .instance.currentUser!.uid,
+        senderRole:
+            widget.currentUserRole,
+        message:
+            _messageController.text
+                .trim(),
       ),
     );
 
@@ -69,31 +78,48 @@ class _ChatScreenState
   @override
   void dispose() {
     _messageController.dispose();
+
     _chatBloc.close();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final currentUserId =
-        FirebaseAuth.instance.currentUser!.uid;
+        FirebaseAuth.instance.currentUser!
+            .uid;
+
+    final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor:
+          const Color(0xFFF5F7FB),
+
       appBar: AppBar(
-        title: const Text('Job Chat'),
+        title: const Text(
+          'Job Chat',
+        ),
       ),
-      body: BlocBuilder<ChatBloc, ChatState>(
+
+      body: BlocBuilder<
+        ChatBloc,
+        ChatState
+      >(
         bloc: _chatBloc,
         builder: (context, state) {
           if (state is ChatLoading) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child:
+                  CircularProgressIndicator(),
             );
           }
 
           if (state is ChatError) {
             return Center(
-              child: Text(state.message),
+              child: Text(
+                state.message,
+              ),
             );
           }
 
@@ -101,16 +127,59 @@ class _ChatScreenState
             if (state.messages.isEmpty) {
               return Column(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Center(
-                      child: Text(
-                        'No messages yet',
+                      child: Column(
+                        mainAxisAlignment:
+                            MainAxisAlignment
+                                .center,
+                        children: [
+                          Icon(
+                            Icons
+                                .forum_outlined,
+                            size: 72,
+                            color: Colors.grey
+                                .withOpacity(
+                              0.45,
+                            ),
+                          ),
+
+                          const SizedBox(
+                            height: 20,
+                          ),
+
+                          Text(
+                            'No Messages Yet',
+                            style: theme
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight:
+                                      FontWeight
+                                          .w700,
+                                ),
+                          ),
+
+                          const SizedBox(
+                            height: 10,
+                          ),
+
+                          Text(
+                            'Start the conversation.',
+                            style: theme
+                                .textTheme
+                                .bodyMedium,
+                          ),
+                        ],
                       ),
                     ),
                   ),
+
                   MessageInput(
-                    controller: _messageController,
-                    onSend: _sendMessage,
+                    controller:
+                        _messageController,
+                    onSend:
+                        _sendMessage,
                   ),
                 ],
               );
@@ -120,15 +189,24 @@ class _ChatScreenState
               children: [
                 Expanded(
                   child: ListView.builder(
+                    reverse: true,
                     padding:
                         const EdgeInsets.only(
-                      top: 12,
+                      top: 18,
+                      bottom: 12,
                     ),
                     itemCount:
                         state.messages.length,
-                    itemBuilder: (context, index) {
+                    itemBuilder:
+                        (context, index) {
+                      final reversedMessages =
+                          state.messages
+                              .reversed
+                              .toList();
+
                       final message =
-                          state.messages[index];
+                          reversedMessages[
+                              index];
 
                       return MessageBubble(
                         message: message,
@@ -139,9 +217,12 @@ class _ChatScreenState
                     },
                   ),
                 ),
+
                 MessageInput(
-                  controller: _messageController,
-                  onSend: _sendMessage,
+                  controller:
+                      _messageController,
+                  onSend:
+                      _sendMessage,
                 ),
               ],
             );

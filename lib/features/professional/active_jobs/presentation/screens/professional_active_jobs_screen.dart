@@ -1,6 +1,9 @@
+// professional_active_jobs_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widgets/jobs/job_card.dart';
 import '../../../../../shared/models/job_model.dart';
 import '../../../../../shared/repositories/job_repository.dart';
 
@@ -15,17 +18,17 @@ class ProfessionalActiveJobsScreen
     final JobRepository jobRepository =
         JobRepository();
 
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'My Active Jobs',
         ),
       ),
-
       body: StreamBuilder<List<JobModel>>(
         stream: jobRepository
             .getProfessionalActiveJobs(),
-
         builder: (context, snapshot) {
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
@@ -46,77 +49,79 @@ class ProfessionalActiveJobsScreen
           final jobs = snapshot.data ?? [];
 
           if (jobs.isEmpty) {
-            return const Center(
-              child: Text(
-                'No active jobs',
+            return Center(
+              child: Column(
+                mainAxisAlignment:
+                    MainAxisAlignment
+                        .center,
+                children: [
+                  Icon(
+                    Icons.engineering_rounded,
+                    size: 72,
+                    color: Colors.grey
+                        .withOpacity(0.45),
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  Text(
+                    'No Active Jobs',
+                    style: theme
+                        .textTheme.titleLarge
+                        ?.copyWith(
+                          fontWeight:
+                              FontWeight
+                                  .w700,
+                        ),
+                  ),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  Text(
+                    'Accepted jobs will appear here.',
+                    style: theme
+                        .textTheme.bodyMedium,
+                  ),
+                ],
               ),
             );
           }
 
-          return ListView.builder(
-            itemCount: jobs.length,
+          return Center(
+            child: ConstrainedBox(
+              constraints:
+                  const BoxConstraints(
+                maxWidth: 900,
+              ),
+              child: ListView.builder(
+                padding:
+                    const EdgeInsets.all(
+                  24,
+                ),
+                itemCount: jobs.length,
+                itemBuilder:
+                    (context, index) {
+                  final job = jobs[index];
 
-            itemBuilder: (context, index) {
-              final job = jobs[index];
-
-              return GestureDetector(
-                onTap: () {
-                  context.push(
-                    '/job-details/${job.id}',
-                    extra: {'isProfessional': true},
+                  return JobCard(
+                    job: job,
+                    onTap: () {
+                      context.push(
+                        '/job-details/${job.id}',
+                        extra: {
+                          'isProfessional':
+                              true,
+                        },
+                      );
+                    },
                   );
                 },
-
-                child: Card(
-                  margin:
-                      const EdgeInsets.all(
-                    12,
-                  ),
-
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.all(
-                      16,
-                    ),
-
-                    child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment
-                              .start,
-
-                      children: [
-                        Text(
-                          job.category,
-                          style:
-                              const TextStyle(
-                            fontSize: 18,
-                            fontWeight:
-                                FontWeight
-                                    .bold,
-                          ),
-                        ),
-
-                        const SizedBox(
-                          height: 10,
-                        ),
-
-                        Text(
-                          job.description,
-                        ),
-
-                        const SizedBox(
-                          height: 10,
-                        ),
-
-                        Text(
-                          'Status: ${job.status.name}',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
+              ),
+            ),
           );
         },
       ),

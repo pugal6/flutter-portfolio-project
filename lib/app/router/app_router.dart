@@ -29,8 +29,7 @@ final GoRouter appRouter = GoRouter(
 
     final isAuthRoute =
         currentPath == '/login' ||
-        currentPath == '/signup' ||
-        currentPath == '/role-selection';
+        currentPath == '/signup';
 
     // User NOT logged in
     if (user == null) {
